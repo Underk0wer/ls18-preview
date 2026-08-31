@@ -1,0 +1,546 @@
+/* ═══════════════════════════════════════════════════
+   LIMÓN SODA ZERO — Landing scroll-scrub
+   ═══════════════════════════════════════════════════ */
+
+:root{
+  --lima:  #A8E000;
+  --azul:  #0000FD;   /* el azul del lettering del diseño */
+  --carga: #00AE42;   /* fondo de la pantalla de carga */
+  --negro: #070A05;
+  --hueso: #F2F5E9;
+
+
+  --ease: cubic-bezier(.22,1,.36,1);
+  --pad: clamp(1.25rem, 3.5vw, 3.25rem);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{
+  background:var(--negro);
+  -webkit-text-size-adjust:100%;
+}
+
+body{
+  font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  color:var(--hueso);
+  background:var(--negro);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+img{ display:block; max-width:100%; height:auto; }
+a{ color:inherit; text-decoration:none; }
+
+::selection{ background:var(--lima); color:var(--negro); }
+
+:focus-visible{
+  outline:2px solid var(--lima);
+  outline-offset:4px;
+  border-radius:4px;
+}
+
+
+/* ═══════════ PRELOADER ═══════════ */
+
+.loader{
+  position:fixed; inset:0; z-index:100;
+  overflow:hidden;
+  background:transparent;      /* el color lo pone el iris */
+}
+.loader[hidden]{ display:none; }
+
+/* Centro de la O de SODA dentro del logo, medido sobre el propio SVG */
+:root{ --oX:51.12%; --oY:53.96%; --logoW:min(58vw, 330px); }
+
+/* Disco cuyo box-shadow pinta todo el resto de verde: al crecer, el
+   agujero se abre desde la O. */
+.loader__bg{
+  position:absolute; inset:0; z-index:1;
+  background:var(--carga);
+}
+/* al abrir desaparece, y entonces el agujero del iris deja ver la estancia */
+.loader.is-out .loader__bg{ opacity:0; }
+
+.loader__iris{
+  position:absolute; left:50%; top:50%; z-index:2;
+  width:calc(var(--logoW) * .118);
+  height:calc(var(--logoW) * .118);
+  margin:calc(var(--logoW) * -.059) 0 0 calc(var(--logoW) * -.059);
+  border-radius:50%;
+  box-shadow:0 0 0 100vmax var(--carga);
+  transform:scale(1);
+  will-change:transform;
+}
+
+/* El logo se coloca de modo que su O caiga justo en el centro */
+.loader__logoBox{
+  position:absolute; left:50%; top:50%; z-index:3;
+  width:var(--logoW);
+  transform:translate(calc(var(--oX) * -1), calc(var(--oY) * -1));
+}
+.loader__logo{
+  display:block; width:100%; height:auto;
+  transform-origin:var(--oX) var(--oY);
+  animation:pulsoLogo 1s ease-in-out infinite;
+}
+@keyframes pulsoLogo{
+  0%,100%{ transform:scale(1); }
+  50%    { transform:scale(1.07); }
+}
+
+/* ── apertura: el logo crece desde su O y el iris se abre con él ── */
+.loader.is-out .loader__logo{
+  animation:creceLogo 1.15s cubic-bezier(.65,0,.35,1) forwards;
+  /* se vacía el interior de la O; como la máscara va en el propio logo,
+     crece con él y el hueco sigue calzando con el del iris */
+  -webkit-mask-image:radial-gradient(ellipse 5.9% 6.4% at var(--oX) var(--oY),
+                     transparent 99%, #000 100%);
+          mask-image:radial-gradient(ellipse 5.9% 6.4% at var(--oX) var(--oY),
+                     transparent 99%, #000 100%);
+}
+.loader.is-out .loader__iris{
+  animation:abreIris 1.15s cubic-bezier(.65,0,.35,1) forwards;
+}
+@keyframes creceLogo{
+  0%  { transform:scale(1);   opacity:1; }
+  40% { opacity:1; }
+  62% { opacity:0; }
+  100%{ transform:scale(110); opacity:0; }
+}
+@keyframes abreIris{
+  from{ transform:scale(1); }
+  to  { transform:scale(110); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .loader__logo{ animation:none; }
+  .loader.is-out .loader__logo{ animation:none; opacity:0; }
+  .loader.is-out .loader__iris{ animation:abreIris .4s linear forwards; }
+}
+
+
+/* ═══════════ HEADER ═══════════ */
+
+.hdr{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:flex-start; justify-content:flex-start;
+  padding:var(--pad);
+  pointer-events:none;
+}
+.hdr > *{ pointer-events:auto; }
+
+/* Logo — esquina superior derecha. El orden del DOM deja el logo
+   primero (es lo primero que conviene anunciar); el intercambio visual
+   se hace con order. */
+.hdr__logo{
+  display:block;
+  width:clamp(150px, 12vw, 210px);
+  transition:transform .4s var(--ease);
+  transform-origin:left top;
+}
+.hdr__logo:hover{ transform:scale(1.04); }
+
+
+/* ═══════════ PIE: redes + bases legales ═══════════ */
+
+.foot{
+  position:fixed; right:var(--pad); bottom:var(--pad); z-index:50;
+  display:flex; flex-direction:column; align-items:flex-end; gap:.7rem;
+}
+.foot__social{ display:flex; gap:.55rem; }
+.foot__social img{
+  width:clamp(34px,2.6vw,44px); height:auto;
+  transition:transform .3s var(--ease);
+}
+.foot__social a:hover img{ transform:translateY(-4px) scale(1.08); }
+
+.foot__bases img{
+  width:clamp(96px,7vw,134px); height:auto;
+  transition:transform .3s var(--ease), opacity .3s var(--ease);
+}
+.foot__bases:hover img{ transform:translateY(-2px); opacity:.85; }
+
+
+
+/* ═══════════ TITULAR DE LA ESTANCIA 2 ═══════════ */
+
+.e2t{ position:absolute; inset:0; pointer-events:none; }
+
+.e2i{
+  position:absolute;
+  opacity:0;
+  animation-duration:.85s;
+  animation-timing-function:var(--ease);
+  animation-fill-mode:both;
+  animation-play-state:paused;
+}
+.e2t.is-on .e2i{ animation-play-state:running; }
+
+.e2i--kits    { left:  8.38%; top: 23.32%; width: 17.55%; animation-name:entraTexto; animation-delay:.05s; }
+.e2i--para    { left: 25.21%; top: 32.68%; width:  7.45%; animation-name:entraTexto; animation-delay:.15s; }
+.e2i--alargar { left:  6.51%; top: 39.06%; width: 27.08%; animation-name:entraTexto; animation-delay:.25s; }
+.e2i--tu      { left: 15.00%; top: 54.34%; width:  6.35%; animation-name:entraTexto; animation-delay:.35s; }
+.e2i--n18     { left: 19.74%; top: 52.95%; width: 15.42%; animation-name:entraTexto; animation-delay:.45s; }
+.e2i--starA   { left:  5.42%; top: 22.68%; width:  4.95%; animation-name:entraEstrella; animation-delay:.60s; animation-duration:.95s; }
+.e2i--starB   { left: 32.40%; top: 60.45%; width:  5.47%; animation-name:entraEstrella; animation-delay:.70s; animation-duration:.95s; }
+
+/* Mismo tratamiento que en la estancia 1: la capa de fuera las hace
+   crecer al entrar y el SVG de dentro gira sin parar. */
+.e2i--starA img,
+.e2i--starB img{
+  display:block; width:100%; height:auto;
+  animation:giraEstrella 3s linear infinite;
+}
+
+
+/* ═══════════ TEXTOS SOBRE EL VIDEO ═══════════ */
+
+/* El video va con object-fit:cover, así que el encuadre no coincide con
+   el viewport. Esta caja reproduce ese mismo recorte para que cada texto
+   quede sobre su producto en cualquier proporción de pantalla. */
+.frame--e1{ z-index:1; }
+.frame{
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:100%; height:56.25vw;
+  min-height:100%; min-width:177.78vh;
+  pointer-events:none;
+}
+
+.ov{
+  position:absolute;
+  opacity:0;
+  transform:translate3d(0,14px,0) scale(.96);
+  transition:opacity .45s var(--ease), transform .45s var(--ease);
+  transform-origin:center;
+}
+.ov.is-on{ opacity:1; transform:none; }
+
+/* Posiciones tomadas del diseño (Editable_WEB_Muestra, 1920×1080) */
+.ov--parrilla{ left:64.01%; top:15.74%; width:10.26%; }
+.ov--tacataca{ left:81.93%; top:23.89%; width:10.99%; }
+.ov--rana    { left:40.05%; top:35.65%; width:10.73%; }
+.ov--parlante{ left:80.42%; top: 72.91%; width:11.20%; }
+.ov--cooler  { left:62.50%; top: 81.80%; width: 8.80%; }
+
+
+/* ═══════════ ESTANCIA 1 ═══════════ */
+
+.e1{
+  position:relative;
+  height:100svh; height:100vh;
+  overflow:hidden;
+  background:var(--negro);
+}
+.e1__base{ position:absolute; inset:0; }
+.e1__base img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:50% 50%;
+}
+
+/* La lata va anclada al encuadre de la foto, igual que las etiquetas
+   del video, para que calce con la mano en cualquier proporción. */
+/* Dos capas para que no se peleen por el mismo transform: la de fuera
+   lleva el desplazamiento del scroll, la de dentro la flotación. */
+.e1__lataPos{
+  position:absolute;
+  left:29.38%; top:28.33%; width:19.17%;
+  transform-origin:50% 55%;
+  will-change:transform;
+}
+.e1__lata{
+  display:block; width:100%; height:auto;
+  transform-origin:50% 55%;
+  animation:flota 4.2s ease-in-out infinite;
+}
+@keyframes flota{
+  0%,100%{ transform:scale(1); }
+  50%    { transform:scale(1.055); }
+}
+
+.e1__txt{
+  position:absolute; left:0; top:0; right:0; bottom:0;
+  z-index:2;                 /* por encima de la lata, para poder pulsar */
+  pointer-events:none;
+}
+/* ── piezas del titular, en las posiciones del diseño ── */
+.e1i{
+  position:absolute;
+  opacity:0;
+  animation-duration:.85s;
+  animation-timing-function:var(--ease);
+  animation-fill-mode:both;
+  animation-play-state:paused;
+}
+.e1.is-on .e1i{ animation-play-state:running; }
+
+.e1i--este18{ left: 68.58%; top: 25.52%; width: 21.61%; animation-name:entraTexto; animation-delay:.10s; }
+.e1i--todo  { left: 64.13%; top: 33.19%; width: 30.38%; animation-name:entraTexto; animation-delay:.24s; }
+.e1i--nada  { left: 60.57%; top: 47.12%; width: 30.42%; animation-name:entraTexto; animation-delay:.38s; }
+
+/* Estrellas: la capa de fuera hace la entrada (crecen), el SVG de dentro
+   gira sin parar. Como el giro ya está corriendo cuando entran, se ven
+   girar mientras crecen y siguen girando después. */
+.e1i--star1{ left: 90.14%; top: 29.28%; width:  2.21%;
+             animation-name:entraEstrella; animation-delay:.52s; animation-duration:.95s; }
+.e1i--star2{ left: 66.09%; top: 27.53%; width:  2.21%;
+             animation-name:entraEstrella; animation-delay:.64s; animation-duration:.95s; }
+.e1i--star1 img,
+.e1i--star2 img{
+  display:block; width:100%; height:auto;
+  animation:giraEstrella 3s linear infinite;
+}
+
+@keyframes giraEstrella{
+  from{ transform:rotate(0deg); }
+  to  { transform:rotate(360deg); }
+}
+
+@keyframes entraTexto{
+  from{ opacity:0; transform:translate3d(-38px,0,0) scale(.94); }
+  to  { opacity:1; transform:none; }
+}
+@keyframes entraEstrella{
+  from{ opacity:0; transform:scale(0); }
+  60% { opacity:1; }
+  to  { opacity:1; transform:scale(1); }
+}
+
+/* ── bloque de la promoción ── */
+.e1i--compra   { left:  7.66%; top: 72.13%; width:  8.38%; animation-name:entraTexto; animation-delay:.94s; }
+.e1i--lsz      { left: 15.68%; top: 70.74%; width: 16.98%; animation-name:entraTexto; animation-delay:1.04s; }
+.e1i--locales  { left:  8.38%; top: 75.46%; width: 24.90%; animation-name:entraTexto; animation-delay:1.14s; }
+.e1i--participa{ left:  8.86%; top: 80.65%; width: 24.58%; animation-name:entraTexto; animation-delay:1.24s; }
+.e1i--bajar    { left: 18.02%; top: 87.50%; width:  3.96%; animation-name:entraTexto; animation-delay:1.36s; }
+
+/* Pulso por turnos: cada pieza late en su cuarto del ciclo, así late una
+   a la vez en el orden compra, Limón Soda Zero, locales y participa. */
+.e1i--compra    img,
+.e1i--lsz       img,
+.e1i--locales   img,
+.e1i--participa img{
+  display:block; width:100%; height:auto;
+  animation:pulsoTurno 3.2s ease-in-out infinite;
+}
+.e1i--compra    img{ animation-delay:0s;   }
+.e1i--lsz       img{ animation-delay:.8s;  }
+.e1i--locales   img{ animation-delay:1.6s; }
+.e1i--participa img{ animation-delay:2.4s; }
+
+@keyframes pulsoTurno{
+  0%, 25%, 100%{ transform:scale(1); }
+  12.5%         { transform:scale(1.075); }
+}
+
+.e1i--bajar img{
+  display:block; width:100%; height:auto;
+  animation:bajaSube 1.5s ease-in-out infinite;
+}
+@keyframes bajaSube{
+  0%,100%{ transform:translate3d(0,-14%,0); }
+  50%    { transform:translate3d(0, 14%,0); }
+}
+
+/* ── botón: dos estados del propio material ── */
+.e1__cta{
+  left: 67.83%; top: 67.45%; width: 18.94%;
+  padding:0; border:0; background:none; cursor:pointer;
+  pointer-events:auto;
+  animation-name:entraTexto; animation-delay:.80s;
+  transition:filter .25s var(--ease);
+}
+.e1__cta-up,
+.e1__cta-dn{ display:block; width:100%; height:auto; }
+.e1__cta-dn{ position:absolute; left:0; top:0; opacity:0; }
+.e1__cta:hover{ filter:brightness(1.07); }
+/* al pulsar se cambia por la versión hundida del material */
+.e1__cta:active .e1__cta-up{ opacity:0; }
+.e1__cta:active .e1__cta-dn{ opacity:1; }
+
+
+
+/* ═══════════ COMERCIAL (ventana) ═══════════ */
+
+.lb{
+  position:fixed; inset:0; z-index:200;
+  display:grid; place-items:center;
+  background:rgba(4,6,3,.9);
+  padding:var(--pad);
+  opacity:0; transition:opacity .35s var(--ease);
+}
+.lb.is-open{ opacity:1; }
+.lb[hidden]{ display:none; }
+.lb__box{
+  width:min(100%,1100px);
+  aspect-ratio:16/9;
+  background:#000;
+  border-radius:10px; overflow:hidden;
+  transform:scale(.97); transition:transform .35s var(--ease);
+}
+.lb.is-open .lb__box{ transform:none; }
+.lb__video{ width:100%; height:100%; display:block; }
+.lb__close{
+  position:absolute; top:calc(var(--pad) * .6); right:calc(var(--pad) * .7);
+  width:clamp(44px, 3.4vw, 56px);
+  padding:0; border:0; background:none; cursor:pointer;
+  line-height:0;
+  transition:transform .25s var(--ease);
+}
+.lb__close img{ display:block; width:100%; height:auto; }
+.lb__close:hover{ transform:scale(1.08); }
+.lb__close:active{ transform:scale(.96); }
+
+
+/* ═══════════ HERO / STAGE ═══════════ */
+
+.hero{
+  position:relative;
+  height:100svh; height:100vh;
+}
+
+.hero__sticky{
+  position:relative;
+  height:100%;
+  overflow:hidden;
+}
+
+.stage{ position:absolute; inset:0; background:var(--negro); }
+
+.stage__video{
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:50% 50%;
+  /* Capa propia en el compositor: el scrub no repinta el resto. */
+  transform:translateZ(0);
+  backface-visibility:hidden;
+}
+
+
+/* ═══════════ LEGAL DE LA PROMOCIÓN ═══════════ */
+
+.legal{
+  position:absolute; left:50%; bottom:calc(var(--pad) * .55);
+  transform:translateX(-50%);
+  width:min(72ch, 76%);
+  margin:0;
+  font-size:clamp(.56rem, .72vw, .74rem);
+  line-height:1.45;
+  text-align:center;
+  color:rgba(255,255,255,.9);
+  text-shadow:0 1px 6px rgba(0,0,0,.85), 0 0 18px rgba(0,0,0,.5);
+  pointer-events:none;
+}
+
+
+/* ═══════════ BARRA DE PROGRESO ═══════════ */
+
+.prog{
+  position:fixed; z-index:45;
+  right:calc(var(--pad) * .72);
+  top:50%; transform:translateY(-50%);
+  width:8px; height:min(44vh,360px);
+  border-radius:8px;
+  /* Riel blanco y relleno azul: el mismo par del lettering del diseño. */
+  background:rgba(255,255,255,.62);
+  overflow:hidden;
+  pointer-events:none;
+}
+.prog__fill{
+  display:block; width:100%; height:100%;
+  border-radius:8px;
+  background:var(--azul);
+  transform:scaleY(0);
+  transform-origin:top center;
+  /* scaleY se resuelve en el compositor: no dispara layout en cada frame */
+  will-change:transform;
+}
+
+
+/* ═══════════ RESPONSIVE ═══════════ */
+
+/* En vertical el video se muestra completo: recortarlo a los lados
+   dejaría fuera la piscina y media escena. */
+/* En vertical se sirve un recorte 9:16 del mismo video, para que llene
+   la pantalla nítido en vez de escalarse desde un archivo apaisado. */
+@media (max-aspect-ratio: 4/5){
+
+  /* ══ Estancia 1: el orden lo define Base_Vertical_Muestra_1 ══ */
+
+  /* La caja de la lata replica el encuadre del fondo vertical
+     (1080x2128) para que siga calzando con la mano. */
+  .frame--e1{
+    width:100%; height:calc(100vw * 1.9704);
+    min-height:100%; min-width:calc(100vh / 1.9704);
+  }
+  .e1__lataPos{ left:11.67%; top:45.68%; width:41.94%; }
+
+  .e1i--este18   { left: 26.34%; top:  5.71%; width: 42.27%; }
+  .e1i--star1    { left: 22.14%; top:  7.58%; width:  5.25%; }
+  .e1i--star2    { left: 68.70%; top:  6.67%; width:  4.77%; }
+  .e1i--todo     { left: 18.32%; top: 10.25%; width: 58.11%; }
+  .e1i--nada     { left: 25.19%; top: 18.08%; width: 58.21%; }
+  .e1__cta       { left: 25.38%; top: 29.55%; width: 50.86%; }
+  .e1i--compra   { left: 21.18%; top: 80.56%; width: 22.23%; }
+  .e1i--lsz      { left: 41.98%; top: 79.65%; width: 44.85%; }
+  .e1i--locales  { left: 19.18%; top: 83.33%; width: 65.84%; }
+  .e1i--participa{ left: 18.89%; top: 87.53%; width: 64.98%; }
+  .e1i--bajar    { left: 49.33%; top: 92.98%; width:  9.92%; }
+
+  /* ══ Estancia 2 ══ */
+
+  .frame{ width:100%; height:100%; min-width:0; min-height:0; }
+  .stage__video{ object-position:50% 50%; }
+
+  .e2i--kits    { left: 19.62%; top: 10.67%; width: 40.22%; }
+  .e2i--para    { left: 58.18%; top: 16.24%; width: 17.08%; }
+  .e2i--alargar { left: 15.32%; top: 20.04%; width: 62.08%; }
+  .e2i--tu      { left: 34.78%; top: 29.15%; width: 14.57%; }
+  .e2i--n18     { left: 45.64%; top: 28.32%; width: 35.34%; }
+  .e2i--starA   { left: 12.81%; top: 10.29%; width: 11.34%; }
+  .e2i--starB   { left: 74.65%; top: 32.79%; width: 12.54%; }
+
+  /* Con el video vertical nativo los cinco productos quedan en cuadro */
+  .ov--parrilla{ left:  6.40%; top: 48.06%; width: 27.20%; }
+  .ov--tacataca{ left: 61.80%; top: 52.58%; width: 30.40%; }
+  .ov--rana    { left:  5.40%; top: 62.98%; width: 27.20%; }
+  .ov--parlante{ left: 63.60%; top: 67.06%; width: 28.80%; }
+  .ov--cooler  { left: 21.20%; top: 78.59%; width: 25.60%; }
+
+  /* El logo vuelve a la derecha y el pie va centrado: el intercambio
+     de lados es sólo para escritorio. */
+  /* El logo se acerca al borde: en vertical el margen general lo dejaba
+     muy metido hacia adentro. */
+  .hdr{ justify-content:flex-end; padding-right:calc(var(--pad) * .35); }
+  .hdr__logo{ transform-origin:right top; }
+
+  .foot{
+    right:auto; left:50%; transform:translateX(-50%);
+    align-items:center; gap:.6rem;
+    opacity:0; visibility:hidden;
+    transition:opacity .4s var(--ease), visibility .4s;
+  }
+  body.en-e2 .foot{ opacity:1; visibility:visible; }
+
+  .legal{
+    width:88%;
+    bottom:calc(var(--pad) * 4.6);
+    font-size:.5rem; line-height:1.4;
+  }
+
+  .prog{ width:6px; height:min(32vh,230px); right:calc(var(--pad) * .85); }
+}
+
+
+@media (max-width:520px){
+  .hdr__logo{ width:132px; }
+  .hdr__social{ gap:.45rem; }
+  .hdr__social img{ width:32px; }
+}
+
+
+/* ═══════════ ACCESIBILIDAD ═══════════ */
+
+@media (prefers-reduced-motion: reduce){
+  .cue__line{ animation:none; opacity:.5; }
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Limón Soda Zero</title>
+<meta name="theme-color" content="#070A05">
+<!-- Enlace de revisión: fuera de buscadores -->
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+<link rel="preload" as="image" href="assets/img/logo-ls-static.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ══════════════ PRELOADER ══════════════ -->
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <!-- Verde de fondo, logo encima, y sobre todo el iris: su agujero
+       coincide con la O, así que al abrirse se ve la estancia por ella. -->
+  <span class="loader__bg"></span>
+  <div class="loader__logoBox">
+    <img class="loader__logo" src="assets/img/logo.svg" alt="Limón Soda Zero">
+  </div>
+  <span class="loader__iris"></span>
+</div>
+
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="hdr">
+  <a class="hdr__logo" id="hdrLogo" href="#" aria-label="Limón Soda Zero — inicio">
+    <img src="assets/img/logo-ls-static.png" data-anim="assets/img/logo-ls.webp"
+         alt="Limón Soda Zero" width="400" height="225">
+  </a>
+
+</header>
+
+<!-- ══════════════ PIE ══════════════ -->
+<footer class="foot">
+  <nav class="foot__social" aria-label="Redes sociales">
+    <!-- ENLACES EDITABLES -->
+    <a href="#" target="_blank" rel="noopener" aria-label="YouTube"><img src="assets/icons/yt.svg" alt="" width="44" height="44"></a>
+    <a href="#" target="_blank" rel="noopener" aria-label="TikTok"><img src="assets/icons/tt.svg" alt="" width="44" height="44"></a>
+    <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><img src="assets/icons/ig.svg" alt="" width="44" height="44"></a>
+  </nav>
+  <a class="foot__bases" href="assets/docs/bases-legales.pdf"
+     target="_blank" rel="noopener">
+    <img src="assets/img/txt/bases.webp" alt="Bases legales" width="134" height="32">
+  </a>
+</footer>
+
+
+<!-- ══════════════ HERO SCRUB ══════════════ -->
+<main>
+
+<!-- ══════════════ ESTANCIA 1 ══════════════ -->
+<section class="e1" id="e1">
+  <picture class="e1__base">
+    <source media="(max-aspect-ratio: 4/5)" srcset="assets/img/e1/base_m.webp">
+    <img src="assets/img/e1/base_d.webp" alt="" fetchpriority="high">
+  </picture>
+
+  <!-- La foto trae la lata cortada por la derecha; ésta la completa
+       y además se mueve por su cuenta. -->
+  <div class="frame frame--e1">
+    <div class="e1__lataPos" id="e1Lata">
+      <img class="e1__lata" src="assets/img/e1/lata.webp" alt="">
+    </div>
+  </div>
+
+  <div class="e1__txt">
+    <img class="e1i e1i--este18" src="assets/img/e1/este18.svg" alt="Este 18 corto">
+    <span class="e1i e1i--star1"><img src="assets/img/e1/estrella1.svg" alt=""></span>
+    <span class="e1i e1i--star2"><img src="assets/img/e1/estrella2.svg" alt=""></span>
+    <img class="e1i e1i--todo"   src="assets/img/e1/haztodo.svg" alt="Haz todo">
+    <img class="e1i e1i--nada"   src="assets/img/e1/haznada.svg" alt="Haz nada">
+    <span class="e1i e1i--compra"><img src="assets/img/e1/compra2.svg" alt="Compra"></span>
+    <span class="e1i e1i--lsz"><img src="assets/img/e1/limonsodazero_2.svg" alt="Limón Soda Zero"></span>
+    <span class="e1i e1i--locales"><img src="assets/img/e1/locales2.svg" alt="en locales adheridos"></span>
+    <span class="e1i e1i--participa"><img src="assets/img/e1/participa2.svg" alt="y participa por los siguientes premios"></span>
+    <span class="e1i e1i--bajar"><img src="assets/img/e1/bajar.svg" alt=""></span>
+    <button class="e1__cta e1i" id="verComercial" type="button" aria-haspopup="dialog">
+      <img class="e1__cta-up" src="assets/img/e1/boton.svg" alt="Ver comercial">
+      <img class="e1__cta-dn" src="assets/img/e1/boton_p.svg" alt="" aria-hidden="true">
+    </button>
+  </div>
+</section>
+
+<!-- ══════════════ ESTANCIA 2 ══════════════ -->
+<section class="hero" id="hero">
+  <div class="hero__sticky">
+    <div class="stage">
+      <video class="stage__video" id="video"
+             poster="assets/img/poster.jpg"
+             muted playsinline webkit-playsinline preload="auto"
+             disablepictureinpicture disableremoteplayback
+             aria-hidden="true" tabindex="-1"></video>
+
+    </div>
+
+    <!-- Textos del diseño, anclados al encuadre del video -->
+    <div class="frame" aria-hidden="false">
+      <div class="e2t" id="ovTitular" role="img" aria-label="Kits para alargar tu 18">
+        <img class="e2i e2i--kits"    src="assets/img/e2/kits2.svg"    alt="">
+        <img class="e2i e2i--para"    src="assets/img/e2/para2.svg"    alt="">
+        <img class="e2i e2i--alargar" src="assets/img/e2/alargar2.svg" alt="">
+        <img class="e2i e2i--tu"      src="assets/img/e2/tu2.svg"      alt="">
+        <img class="e2i e2i--n18"     src="assets/img/e2/182.svg"      alt="">
+        <span class="e2i e2i--starA"><img src="assets/img/e2/estrella2.svg" alt=""></span>
+        <span class="e2i e2i--starB"><img src="assets/img/e2/estrella2.svg" alt=""></span>
+      </div>
+      <img class="ov ov--parrilla" data-at="0.9" src="assets/img/txt/parrilla.webp" alt="Parrilla">
+      <img class="ov ov--tacataca" data-at="2.2" src="assets/img/txt/tacataca.webp" alt="Taca-taca">
+      <img class="ov ov--cooler"   data-at="3.15" src="assets/img/txt/cooler.webp"   alt="Cooler">
+      <img class="ov ov--rana"     data-at="4.2" src="assets/img/txt/rana.webp"     alt="Juego de la rana">
+      <img class="ov ov--parlante" data-at="5.5" src="assets/img/txt/parlante.webp" alt="Parlante">
+    </div>
+
+
+    <!-- TEXTO EDITABLE -->
+    <p class="legal">Válida en Chile Continental para mayores de 18 años del 20.08.26 al 20.10.26 o hasta agotar stock de 100 tickets por local. Entrega de premios en un plazo de 30 días desde la notificación al ganador. Bases en www.ccu.cl/bases-legales.</p>
+
+    <!-- Progreso del recorrido -->
+    <div class="prog" id="prog" role="progressbar" aria-label="Progreso del scroll"
+         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <span class="prog__fill" id="progFill"></span>
+    </div>
+
+
+  </div>
+</section>
+</main>
+
+<!-- ══════════════ COMERCIAL ══════════════ -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Comercial" hidden>
+  <button class="lb__close" id="lbClose" type="button" aria-label="Cerrar">
+    <img src="assets/img/e1/cerrar.svg" alt="">
+  </button>
+  <div class="lb__box">
+    <!-- El iframe se rellena al abrir y se vacía al cerrar: así YouTube
+         no carga nada mientras la ventana está guardada. -->
+    <iframe class="lb__video" id="lbVideo" title="Comercial Limón Soda Zero"
+            src="" frameborder="0" allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
